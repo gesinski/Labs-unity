@@ -54,4 +54,13 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Jumping");
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "FallLevel")
+        {
+            Debug.Log("Player fell into void");
+        }
+    }
+
 }
