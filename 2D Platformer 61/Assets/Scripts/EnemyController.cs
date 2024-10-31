@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class EnemyController : MonoBehaviour
 {
@@ -75,5 +76,24 @@ public class EnemyController : MonoBehaviour
 
         //rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        
+        if (col.CompareTag("Player"))
+        {
+            if (transform.position.y < col.gameObject.transform.position.y)
+            {
+                animator.SetBool("isDead", true);
+                StartCoroutine(KillOnAnimationEnd());
+            }
+        }
+    }
+
+    IEnumerator KillOnAnimationEnd()
+    {
+        yield return new WaitForSeconds(1);
+        gameObject.SetActive(false);
     }
 }

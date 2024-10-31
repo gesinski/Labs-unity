@@ -20,18 +20,12 @@ public class PlayerController : MonoBehaviour
     private bool isLadder = false;
     private bool isClimbing = false;
     private float vertical;
+    private int lives = 3;
+    private Vector2 startPosition;
     // Start is called before the first frame update
     void Start()
     {
         
-    }
-
-    private void Flip()
-    {
-        isFacingRight = !isFacingRight;
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
     }
 
     // Update is called once per frame
@@ -91,6 +85,7 @@ public class PlayerController : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        startPosition = transform.position;
     }
 
     bool IsGrounded()
@@ -105,6 +100,13 @@ public class PlayerController : MonoBehaviour
             rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             Debug.Log("Jumping");
         }
+    }
+    private void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -122,6 +124,25 @@ public class PlayerController : MonoBehaviour
         if (col.CompareTag("Ladder"))
         {
             isLadder = true;
+        }
+        if (col.CompareTag("Enemy"))
+        {
+            if (transform.position.y > col.gameObject.transform.position.y) {
+                score++;
+                Debug.Log("Killed an enemy");
+            }
+            else
+            {
+                lives--;
+                if (lives == 0)
+                {
+                    Debug.Log("Game Over");
+                }else
+                {
+                    Debug.Log(lives);
+                    transform.position = startPosition;
+                }
+            }
         }
     }
 
