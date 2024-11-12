@@ -20,7 +20,9 @@ public class PlayerController : MonoBehaviour
     private bool isLadder = false;
     private bool isClimbing = false;
     private float vertical;
-    private int lives = 3;
+    public int lives = 3;
+    private int keysFound = 0;
+    private const int keysNumber = 3;
     private Vector2 startPosition;
     // Start is called before the first frame update
     void Start()
@@ -144,6 +146,32 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        if (col.CompareTag("Key"))
+        {
+            keysFound++;
+            col.gameObject.SetActive(false);
+            Debug.Log("keysFound: " + keysFound);
+        }
+        if (col.CompareTag("Heart"))
+        {
+            lives++;
+            col.gameObject.SetActive(false);
+            Debug.Log("Lives: "+ lives);
+        }
+        if (col.CompareTag("Finish"))
+        {
+            if (keysFound == 3)
+            {
+                Debug.Log("Finished");
+            } else
+            {
+                Debug.Log("Not enough keys");
+            }
+        }
+        if (col.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(col.transform);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D col)
@@ -152,6 +180,10 @@ public class PlayerController : MonoBehaviour
         {
             isLadder = false;
             isClimbing = false;
+        }
+        if (col.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(null);
         }
     }
 }
