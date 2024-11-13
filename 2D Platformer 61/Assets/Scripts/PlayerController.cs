@@ -33,42 +33,43 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isWalking = false;
-        vertical = Input.GetAxis("Vertical");
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            isWalking = true;
-            if (!isFacingRight)
+        if (GameManager.instance.currentGameState == GameState.GAME) {
+            isWalking = false;
+            vertical = Input.GetAxis("Vertical");
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
-                Flip();
+                transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                isWalking = true;
+                if (!isFacingRight)
+                {
+                    Flip();
+                }
             }
-        }
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(moveSpeed * Time.deltaTime * -1.0f, 0.0f, 0.0f, Space.World);
-            isWalking = true;
-            if (isFacingRight)
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
-                Flip();
+                transform.Translate(moveSpeed * Time.deltaTime * -1.0f, 0.0f, 0.0f, Space.World);
+                isWalking = true;
+                if (isFacingRight)
+                {
+                    Flip();
+                }
             }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
+
+            if (isLadder && Math.Abs(vertical) > 0)
+            {
+                isClimbing = true;
+            }
+            //Debug.DrawRay(transform.position, rayLength*Vector3.down, Color.white);
+
+            animator.SetBool("isGrounded", IsGrounded());
+            animator.SetBool("isWalking", isWalking);
+            animator.SetBool("isClimbing", isClimbing);
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
-
-        if (isLadder && Math.Abs(vertical) > 0)
-        {
-            isClimbing = true;
-        }
-        //Debug.DrawRay(transform.position, rayLength*Vector3.down, Color.white);
-
-        animator.SetBool("isGrounded", IsGrounded());
-        animator.SetBool("isWalking", isWalking);
-        animator.SetBool("isClimbing", isClimbing);
-
     }
 
     private void FixedUpdate()
