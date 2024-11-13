@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]  private float jumpForce = 6.0f; [Space( 10 )]
 
     private Rigidbody2D rigidbody;
+    private BoxCollider2D BoxCollider2D;
     public LayerMask groundLayer;
     const float rayLength = 1.5f;
     private Animator animator;
@@ -81,11 +82,13 @@ public class PlayerController : MonoBehaviour
         } else
         {
             rigidbody.gravityScale = 1;
+
         }
     }
 
     private void Awake()
     {
+        BoxCollider2D = GetComponent<BoxCollider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         startPosition = transform.position;
@@ -126,6 +129,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Ladder"))
         {
+            BoxCollider2D.size = new Vector3(0.9f, BoxCollider2D.size.y);
             isLadder = true;
         }
         if (col.CompareTag("Enemy"))
@@ -179,6 +183,7 @@ public class PlayerController : MonoBehaviour
     {
         if (col.CompareTag("Ladder"))
         {
+            BoxCollider2D.size = new Vector3(1.12f, BoxCollider2D.size.y);
             isLadder = false;
             isClimbing = false;
         }
