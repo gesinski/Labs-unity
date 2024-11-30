@@ -10,6 +10,13 @@ public class PlayerController : MonoBehaviour
     [Range(0.01f, 20.0f)] [SerializeField] private float moveSpeed = 0.1f;
     [SerializeField]  private float jumpForce = 6.0f; [Space( 10 )]
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip bSound;
+    [SerializeField] private AudioClip keySound;
+    [SerializeField] private AudioClip eSound;
+    [SerializeField] private AudioClip victorySound;
+    private AudioSource source;
+
     private Rigidbody2D rigidbody;
     private BoxCollider2D BoxCollider2D;
     public LayerMask groundLayer;
@@ -92,6 +99,7 @@ public class PlayerController : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         startPosition = transform.position;
+        source = GetComponent<AudioSource>();
     }
 
     bool IsGrounded()
@@ -124,6 +132,8 @@ public class PlayerController : MonoBehaviour
         if (col.CompareTag("Bonus"))
         {
             score++;
+            GameManager.instance.AddPoints(score);
+            source.PlayOneShot(bSound, AudioListener.volume);
             Debug.Log("Score: " + score);
             col.gameObject.SetActive(false);
         }
@@ -136,11 +146,15 @@ public class PlayerController : MonoBehaviour
         {
             if (transform.position.y > col.gameObject.transform.position.y) {
                 score++;
+                GameManager.instance.AddPoints(score);
+                GameManager.instance.AddEnemiesKilled();
+                source.PlayOneShot(eSound, AudioListener.volume);
                 Debug.Log("Killed an enemy");
             }
             else
             {
                 lives--;
+                GameManager.instance.SubLives();
                 if (lives == 0)
                 {
                     Debug.Log("Game Over");
@@ -153,13 +167,16 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Key"))
         {
-            keysFound++;
+            //keysFound++;
+            GameManager.instance.AddKeys();
+            source.PlayOneShot(keySound, AudioListener.volume);
             col.gameObject.SetActive(false);
-            Debug.Log("keysFound: " + keysFound);
+            //Debug.Log("keysFound: " + keysFound);
         }
         if (col.CompareTag("Heart"))
         {
             lives++;
+            GameManager.instance.AddLives();
             col.gameObject.SetActive(false);
             Debug.Log("Lives: "+ lives);
         }
@@ -167,6 +184,7 @@ public class PlayerController : MonoBehaviour
         {
             if (keysFound == 3)
             {
+                source.PlayOneShot(victorySound, AudioListener.volume);
                 Debug.Log("Finished");
             } else
             {
