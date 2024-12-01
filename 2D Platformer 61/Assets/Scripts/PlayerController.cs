@@ -167,11 +167,11 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("Key"))
         {
-            //keysFound++;
+            keysFound++;
             GameManager.instance.AddKeys();
             source.PlayOneShot(keySound, AudioListener.volume);
             col.gameObject.SetActive(false);
-            //Debug.Log("keysFound: " + keysFound);
+            Debug.Log("keysFound: " + keysFound);
         }
         if (col.CompareTag("Heart"))
         {
@@ -185,6 +185,9 @@ public class PlayerController : MonoBehaviour
             if (keysFound == 3)
             {
                 source.PlayOneShot(victorySound, AudioListener.volume);
+                score = 100 * lives;
+                GameManager.instance.AddPoints(score);
+                GameManager.instance.GameOver();
                 Debug.Log("Finished");
             } else
             {
