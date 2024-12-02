@@ -1686,6 +1686,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameTitle
       objectReference: {fileID: 0}
+    - target: {fileID: 8117681801168550787, guid: f8b91410dfe78ff4eba9bf8c635e18e1, type: 3}
+      propertyPath: m_text
+      value: DOWALONA GRA O LISKU
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
