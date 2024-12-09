@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private int keysFound = 0;
     private const int keysNumber = 3;
     private Vector2 startPosition;
+    private Vector2 doorPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -127,6 +128,17 @@ public class PlayerController : MonoBehaviour
     {
         if (col.tag == "FallLevel")
         {
+            lives--;
+            GameManager.instance.SubLives();
+            if (lives == 0)
+            {
+                Debug.Log("Game Over");
+            }
+            else
+            {
+                Debug.Log(lives);
+                transform.position = startPosition;
+            }
             Debug.Log("Player fell into void");
         }
         if (col.CompareTag("Bonus"))
@@ -197,6 +209,11 @@ public class PlayerController : MonoBehaviour
         if (col.CompareTag("MovingPlatform"))
         {
             transform.SetParent(col.transform);
+        }
+        if (col.CompareTag("Doors"))
+        {
+            doorPos = new Vector2(10.0f, -5.0f);
+            transform.position = doorPos;
         }
     }
 
