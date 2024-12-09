@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerController : MonoBehaviour
@@ -133,6 +134,7 @@ public class PlayerController : MonoBehaviour
             if (lives == 0)
             {
                 Debug.Log("Game Over");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
             else
             {
@@ -170,7 +172,9 @@ public class PlayerController : MonoBehaviour
                 if (lives == 0)
                 {
                     Debug.Log("Game Over");
-                }else
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+                else
                 {
                     Debug.Log(lives);
                     transform.position = startPosition;
